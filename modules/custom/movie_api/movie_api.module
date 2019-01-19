@@ -1,0 +1,44 @@
+<?php
+/*
+ * Add Button for Fetch movie details
+*/
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_alter().
+ */
+function movie_api_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id){
+  if($form_id == 'node_movie_form') {
+     $form['movie_details'] = array(
+      '#type' => 'button',
+      '#value' => t('Get Details'),
+      '#weight' => -3,
+    );
+
+    $form['#attached']['library'][] = 'movie_api/movie_api';
+    $form['#validate'][]= 'movie_api_node_validate';
+  }
+  return $form;
+}
+
+/**
+ * Implements custom validatefunction.
+ */
+function movie_api_node_validate($form, FormStateInterface $form_state) {
+
+  $form_values = $form_state->getValues();
+  if($form_values['form_id'] == 'node_movie_form') {
+    $title = $form_values['title'][0]['value'];
+    $relesed = $form_values['field_released'][0]['value'];
+    $query = \Drupal::entityQuery('node')
+    ->condition('title', $title)
+    ->condition('status', 1);
+    $nids = $query->execute();
+    if(!empty($nids)){
+      $form_state->setErrorByName('title', t('Movie already Exist.'));
+    }
+  }
+}
+
+

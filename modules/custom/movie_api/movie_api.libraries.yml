@@ -1,0 +1,4 @@
+movie_api:
+  version: 1.x
+  js:
+    js/movie_api.js: {}

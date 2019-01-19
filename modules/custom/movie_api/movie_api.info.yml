@@ -1,0 +1,6 @@
+name: Movie API
+description: Fetch Movie Details from Title.
+package: custom
+type: module
+version: 1.0
+core: 8.x
